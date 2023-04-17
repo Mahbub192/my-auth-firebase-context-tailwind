@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../providers/AuthProviders";
 
 const Login = () => {
+  const { signIn } = useContext(AuthContext);
+
   const handleLogin = (event) => {
     event.preventDefault();
 
@@ -10,7 +13,16 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    console.log(email, password);
+    signIn(email, password)
+    .then(result => {
+        const loginUser = result.user;
+        console.log(loginUser);
+        console.log("login completed");
+        form.reset();
+    })
+    .catch(error =>{
+        console.log(error);
+    })
   };
   return (
     <>
@@ -21,7 +33,7 @@ const Login = () => {
           </div>
           <div className="card flex-shrink-0 w-full max-w-full shadow-2xl bg-base-100">
             <form onSubmit={handleLogin} className="card-body">
-            <div className="form-control">
+              <div className="form-control">
                 <label className="label">
                   <span className="label-text">Name</span>
                 </label>
@@ -54,8 +66,8 @@ const Login = () => {
                   className="input input-bordered"
                 />
                 <label className="label">
-                  <Link to="/login" className="label-text-alt link link-hover">
-                    Already have an account?
+                  <Link to="/register" className="label-text-alt link link-hover">
+                  New to Auth Master? Please Register
                   </Link>
                 </label>
               </div>
